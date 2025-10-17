@@ -1,0 +1,101 @@
+.pageContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.signup {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+.signup h1 {
+  margin-bottom: 1rem;
+}
+
+.signup p {
+  color: black;
+  font-size: 20px;
+  margin-bottom: 2rem;
+}
+
+.signup form {
+  width: 50%;
+}
+
+.signup ul {
+  list-style: none;
+  padding: 0;
+}
+
+.signup li {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-bottom: 30px;
+}
+
+.signup input {
+  border-radius: 15px;
+  font-size: 20px;
+  text-align: center;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+}
+
+.btnSave {
+  background-color: #fac4cf;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 15px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnSave:hover:not(:disabled) {
+  background-color: #f8b0c1;
+  transform: translateY(-2px);
+}
+
+.btnSave:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.alert {
+  color: #d8000c;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: #ffdddd;
+  border: 2px solid #d8000c;
+  border-radius: 8px;
+  font-size: 16px;
+  text-align: center;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media screen and (min-width: 950px) {
+  .signup form {
+    width: 30%;
+  }
+
+  .signup h1 {
+    width: 25%;
+  }
+}
