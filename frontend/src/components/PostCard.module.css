@@ -1,0 +1,263 @@
+.postCard {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e8e8e8;
+  transition: all 0.3s ease;
+}
+
+.postCard:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.postHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.userInfo h3 {
+  margin: 0 0 0.25rem 0;
+  color: #1a1a1a;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.date {
+  color: #8e8e93;
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.editBtn,
+.deleteBtn {
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.editBtn {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.editBtn:hover {
+  background-color: #e0e0e0;
+  transform: translateY(-1px);
+}
+
+.deleteBtn {
+  background-color: #fff0f0;
+  color: #dc2626;
+}
+
+.deleteBtn:hover {
+  background-color: #ffe0e0;
+  transform: translateY(-1px);
+}
+
+.title {
+  font-size: 1.5rem;
+  margin: 1.5rem 0 1rem;
+  color: #1a1a1a;
+  font-weight: 700;
+}
+
+.content {
+  color: #3c3c43;
+  line-height: 1.7;
+  margin: 1rem 0;
+  white-space: pre-wrap;
+  font-size: 1rem;
+}
+
+.image {
+  width: 100%;
+  max-height: 500px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.interactions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.reactions {
+  display: flex;
+  gap: 1rem;
+}
+
+.likeBtn,
+.dislikeBtn,
+.commentToggle {
+  background: #f8f8f8;
+  border: none;
+  padding: 0.625rem 1.25rem;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6b7280;
+}
+
+.likeBtn:hover,
+.dislikeBtn:hover,
+.commentToggle:hover {
+  background-color: #ebebeb;
+  transform: scale(1.05);
+}
+
+.likeBtn.active {
+  background-color: #dbeafe;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.dislikeBtn.active {
+  background-color: #fee2e2;
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.comments {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.comment {
+  background: #f9fafb;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+  border: 1px solid #f0f0f0;
+  transition: all 0.2s ease;
+}
+
+.comment:hover {
+  background: #f3f4f6;
+}
+
+.commentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.comment strong {
+  color: #1a1a1a;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.deleteCommentBtn {
+  padding: 0.375rem 0.875rem;
+  background-color: #fee2e2;
+  color: #dc2626;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.deleteCommentBtn:hover {
+  background-color: #fecaca;
+  transform: translateY(-1px);
+}
+
+.comment p {
+  margin: 0;
+  color: #4b5563;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.commentsSection {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.commentForm {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.commentForm textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  resize: vertical;
+  transition: all 0.2s ease;
+  background-color: #fafafa;
+}
+
+.commentForm textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.commentForm textarea:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.commentForm button {
+  align-self: flex-end;
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.commentForm button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.commentForm button:disabled {
+  background: #d1d5db;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
