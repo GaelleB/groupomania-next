@@ -75,7 +75,7 @@ export default function PostDetailPage() {
                 })}
               </span>
             </div>
-            {user?.id === post.userId && (
+            {user?.id === Number(post.userId) && (
               <div className={styles.actions}>
                 <button
                   onClick={() => router.push(`/posts/${post.id}/edit`)}

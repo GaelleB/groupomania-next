@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import Image from 'next/image';
 import styles from './profile.module.css';
 
 export default function ProfilePage() {
@@ -33,16 +32,6 @@ export default function ProfilePage() {
         <div className={styles.profileCard}>
           <h1>Mon Profil</h1>
 
-          {user.image && (
-            <Image
-              src={user.image}
-              alt="Photo de profil"
-              width={200}
-              height={200}
-              className={styles.avatar}
-            />
-          )}
-
           <div className={styles.info}>
             <div className={styles.infoItem}>
               <strong>Prénom :</strong>
@@ -55,10 +44,6 @@ export default function ProfilePage() {
             <div className={styles.infoItem}>
               <strong>Email :</strong>
               <span>{user.email}</span>
-            </div>
-            <div className={styles.infoItem}>
-              <strong>Rôle :</strong>
-              <span>{user.role === 'admin' ? 'Administrateur' : 'Utilisateur'}</span>
             </div>
           </div>
         </div>

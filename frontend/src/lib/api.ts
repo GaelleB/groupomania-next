@@ -98,7 +98,7 @@ export const commentService = {
 export const userService = {
   getProfile: (id: string) => api.get(`/auth/user/${id}`),
   
-  updateProfile: (id: string, data: any) => api.put(`/auth/user/${id}`, data),
+  updateProfile: (id: string, data: Record<string, unknown>) => api.put(`/auth/user/${id}`, data),
   
   deleteAccount: (id: string) => api.delete(`/auth/user/${id}`)
 };
