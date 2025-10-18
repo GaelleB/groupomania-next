@@ -121,7 +121,10 @@ exports.deletePost = (req, res) => {
             if (post.image != null) {
                 const filename = post.image.split('/images/')[1];
                 fs.unlink(`images/${filename}`, (err) => {
-                    if (err) throw err;
+                    if (err) {
+                        console.error('Erreur lors de la suppression du fichier:', err);
+                        // Continue même si la suppression du fichier échoue
+                    }
                 });
             };
             models.Post.destroy({ where: { id: req.params.id } })
