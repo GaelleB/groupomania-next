@@ -49,7 +49,7 @@ exports.signup = (req, res, next) => {
                     userId: savedUser.id,
                     token: jwt.sign(
                         { userId: savedUser.id },
-                        'SECRET_TOKEN',
+                        process.env.JWT_SECRET || 'SECRET_TOKEN',
                         { expiresIn: '8h' }
                     ),
                     message: 'Utilisateur créé !'
@@ -63,11 +63,8 @@ exports.signup = (req, res, next) => {
 
 // Connexion au compte
 exports.login = (req, res, next) => {
-    console.log(req.body.email)
-    console.log(req.body.password)
     User.findOne ({  where: { email: req.body.email } })
         .then(user => {
-            console.log(user)
         if (!user) {
             return res.status(401).json({ error: 'Utilisateur non trouvé !' });
         }
@@ -78,16 +75,15 @@ exports.login = (req, res, next) => {
                 return res.status(401).json({ error: 'Mot de passe incorrect !' });
             }
             // Contient l'identifiant de l'utilisateur et un token
-            res.status(200).json({ 
+            res.status(200).json({
                 userId: user.id,
                 // Encode un nouveau token grâce à jswonwebtoken
                 token: jwt.sign(
                     { userId: user.id },
-                    'SECRET_TOKEN',
+                    process.env.JWT_SECRET || 'SECRET_TOKEN',
                     { expiresIn: '8h' } // Reconnexion dans 8h
                 )
             });
-            console.log(user._id)
         })
         .catch(error => res.status(500).json({ error }));
     })
@@ -120,6 +116,12 @@ exports.getAllUsers = (req, res, next) => {
 // Modification de l'utilisateur
 exports.modifyUser = (req, res, next) => {
     const userId = req.params.id;
+
+    // SÉCURITÉ: Vérifier que l'utilisateur ne peut modifier que son propre profil
+    if (req.tokenUserId !== parseInt(userId)) {
+        return res.status(403).json({ message: 'Non autorisé à modifier ce profil' });
+    }
+
     const nom = req.body.nom;
     const prenom = req.body.prenom;
     const email = req.body.email;
@@ -148,14 +150,19 @@ exports.modifyUser = (req, res, next) => {
 
 // Suppression de l'utilisateur
 exports.deleteUser = (req, res, next) => {
+    // SÉCURITÉ: Vérifier que l'utilisateur ne peut supprimer que son propre compte
+    if (req.tokenUserId !== parseInt(req.params.id)) {
+        return res.status(403).json({ message: 'Non autorisé à supprimer ce compte' });
+    }
+
     User.findOne ({ where: { id:  req.params.id } })
         .then(user => {
-            if(user!= null){
+            if(user != null){
                 User.destroy({ where: { id: req.params.id } })
                 .then(() => res.status(200).json({ message: 'Utilisateur supprimé !' }))
-                .catch(error =>{ console.log(error); res.status(400).json({ message : error.message })});
+                .catch(error => res.status(400).json({ message : error.message }));
             }
-            else{  console.log("user not found");
+            else{
                 res.status(404).json({ 'erreur': 'Utilisateur non trouvé !' })
             }
         } ).catch(error => {  res.status(500).json({ message : error.message }) })
