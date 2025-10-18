@@ -23,12 +23,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Charger les données du localStorage au démarrage
-    const storedToken = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
+    try {
+      const storedToken = localStorage.getItem('token');
+      const storedUser = localStorage.getItem('user');
 
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+      if (storedToken && storedUser) {
+        setToken(storedToken);
+        setUser(JSON.parse(storedUser));
+      }
+    } catch (error) {
+      console.error('Erreur parsing user:', error);
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
     }
     setLoading(false);
   }, []);
