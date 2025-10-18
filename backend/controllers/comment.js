@@ -33,7 +33,8 @@ exports.deleteComment = (req, res) => {
         if (Comment.userId === req.tokenUserId)
         {
             models.Comment.destroy({ where: { id: req.params.id } })
-            res.status(200).json({message : 'Commentaire supprimé !'})
+            .then(() => res.status(200).json({message : 'Commentaire supprimé !'}))
+            .catch(error => res.status(500).json({error}));
         } else {
             res.status(401).json({
                 message: 'Requête non autorisée !'
