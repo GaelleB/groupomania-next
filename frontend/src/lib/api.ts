@@ -13,9 +13,12 @@ const api = axios.create({
 // Intercepteur pour ajouter le token d'authentification
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    // Vérifier si on est côté client avant d'accéder au localStorage
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
     return config;
   },
@@ -30,7 +33,7 @@ api.interceptors.response.use(
   (error) => {
     // Ne rediriger que si c'est une erreur d'authentification (token invalide)
     // ET qu'on n'est pas déjà sur les pages de login/signup
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && typeof window !== 'undefined') {
       const isAuthPage = window.location.pathname === '/login' || window.location.pathname === '/signup';
       const isTokenError = error.response?.data?.error?.includes('token') || error.response?.data?.error?.includes('Token');
 
