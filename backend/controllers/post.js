@@ -62,8 +62,18 @@ exports.getOnePost = (req, res) => {
         attributes: ['PostId', 'UserId'],
       },
       {
+        model: models.Reaction,
+        attributes: ['PostId', 'UserId', 'type'],
+      },
+      {
         model: models.Comment,
-        attributes: ['content', 'id', 'UserId', 'PostId'],
+        attributes: ['content', 'id', 'UserId', 'PostId', 'createdAt'],
+        include: [
+          {
+            model: models.User,
+            attributes: ['nom', 'prenom', 'id'],
+          },
+        ],
       },
     ],
   })
@@ -90,8 +100,12 @@ exports.getAllPosts = (req, res) => {
         attributes: ['PostId', 'UserId'],
       },
       {
+        model: models.Reaction,
+        attributes: ['PostId', 'UserId', 'type'],
+      },
+      {
         model: models.Comment,
-        attributes: ['content', 'id', 'UserId', 'PostId'],
+        attributes: ['content', 'id', 'UserId', 'PostId', 'createdAt'],
         include: [
           {
             model: models.User,
@@ -244,6 +258,50 @@ exports.dislikePost = async (req, res) => {
     });
     return res.status(201).json({ message: 'Dislike :(' });
   } catch (error) {
+    return res.status(500).send({ error: 'Erreur du serveur' });
+  }
+};
+
+// Nouvelle fonction de réaction
+exports.reactToPost = async (req, res) => {
+  try {
+    const userId = req.tokenUserId;
+    const postId = req.params.id;
+    const { type } = req.body; // like, love, wow, sad, angry
+
+    // Vérifier que le type de réaction est valide
+    const validTypes = ['like', 'love', 'wow', 'sad', 'angry'];
+    if (!type || !validTypes.includes(type)) {
+      return res.status(400).json({ error: 'Type de réaction invalide' });
+    }
+
+    // Chercher une réaction existante de l'utilisateur sur ce post
+    const existingReaction = await models.Reaction.findOne({
+      where: { UserId: userId, PostId: postId },
+    });
+
+    // Si la même réaction existe, la supprimer (toggle)
+    if (existingReaction && existingReaction.type === type) {
+      await existingReaction.destroy();
+      return res.status(200).json({ message: 'Réaction supprimée' });
+    }
+
+    // Si une réaction différente existe, la mettre à jour
+    if (existingReaction && existingReaction.type !== type) {
+      await existingReaction.update({ type });
+      return res.status(200).json({ message: 'Réaction modifiée', reaction: existingReaction });
+    }
+
+    // Créer une nouvelle réaction
+    const newReaction = await models.Reaction.create({
+      UserId: userId,
+      PostId: postId,
+      type,
+    });
+
+    return res.status(201).json({ message: 'Réaction ajoutée', reaction: newReaction });
+  } catch (error) {
+    console.error('Erreur lors de la réaction:', error);
     return res.status(500).send({ error: 'Erreur du serveur' });
   }
 };
