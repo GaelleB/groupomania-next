@@ -76,6 +76,9 @@ export const postService = {
   likePost: (id: string | number) => api.post(`/posts/${id}/like`),
 
   dislikePost: (id: string | number) => api.post(`/posts/${id}/dislike`),
+
+  reactToPost: (id: string | number, type: 'like' | 'love' | 'wow' | 'sad' | 'angry') =>
+    api.post(`/posts/${id}/react`, { type }),
 };
 
 // Services pour les commentaires
@@ -83,6 +86,9 @@ export const commentService = {
   getComments: (postId: string | number) => api.get(`/comments/${postId}`),
 
   createComment: (data: { postId: number; content: string }) => api.post('/comments', data),
+
+  updateComment: (id: string | number, data: { content: string }) =>
+    api.put(`/comments/${id}`, data),
 
   deleteComment: (id: string | number) => api.delete(`/comments/${id}`),
 };
