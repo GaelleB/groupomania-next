@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { postService } from '@/lib/api';
+import { resolveImageUrl } from '@/lib/media';
 import styles from './PostCard.module.css';
 
 interface Like {
@@ -29,11 +30,15 @@ interface Comment {
 
 interface Post {
   id: number;
-  title?: string;
+  title?: string | null;
   content: string;
-  image?: string;
+  image?: string | null;
   UserId: number;
   User?: {
+    nom: string;
+    prenom: string;
+  };
+  user?: {
     nom: string;
     prenom: string;
   };
@@ -61,18 +66,23 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
   const isLiked = likes.some((like) => like.UserId === user?.id);
   const isDisliked = dislikes.some((dislike) => dislike.UserId === user?.id);
   const isOwner = user?.id === post.UserId;
+  const commentCount = comments.length;
+
+  const imageUrl = useMemo(() => resolveImageUrl(post.image), [post.image]);
+  const author = post.User ?? post.user;
 
   const handleLike = async () => {
     try {
       await postService.likePost(post.id);
 
       if (isLiked) {
-        setLikes(likes.filter((like) => like.UserId !== user?.id));
-      } else {
-        setLikes([...likes, { PostId: post.id, UserId: user!.id }]);
-        if (isDisliked) {
-          setDislikes(dislikes.filter((dislike) => dislike.UserId !== user?.id));
-        }
+        setLikes((prev) => prev.filter((like) => like.UserId !== user?.id));
+        return;
+      }
+
+      setLikes((prev) => [...prev, { PostId: post.id, UserId: user!.id }]);
+      if (isDisliked) {
+        setDislikes((prev) => prev.filter((dislike) => dislike.UserId !== user?.id));
       }
     } catch (error) {
       console.error('Erreur lors du like:', error);
@@ -84,12 +94,13 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
       await postService.dislikePost(post.id);
 
       if (isDisliked) {
-        setDislikes(dislikes.filter((dislike) => dislike.UserId !== user?.id));
-      } else {
-        setDislikes([...dislikes, { PostId: post.id, UserId: user!.id }]);
-        if (isLiked) {
-          setLikes(likes.filter((like) => like.UserId !== user?.id));
-        }
+        setDislikes((prev) => prev.filter((dislike) => dislike.UserId !== user?.id));
+        return;
+      }
+
+      setDislikes((prev) => [...prev, { PostId: post.id, UserId: user!.id }]);
+      if (isLiked) {
+        setLikes((prev) => prev.filter((like) => like.UserId !== user?.id));
       }
     } catch (error) {
       console.error('Erreur lors du dislike:', error);
@@ -97,13 +108,15 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
   };
 
   const handleDelete = async () => {
-    if (window.confirm('Êtes-vous sûr de vouloir supprimer ce post ?')) {
-      try {
-        await postService.deletePost(post.id);
-        onDelete?.();
-      } catch (error) {
-        console.error('Erreur lors de la suppression:', error);
-      }
+    if (!window.confirm('\u00CAtes-vous s\u00FBr de vouloir supprimer ce post ?')) {
+      return;
+    }
+
+    try {
+      await postService.deletePost(post.id);
+      onDelete?.();
+    } catch (error) {
+      console.error('Erreur lors de la suppression:', error);
     }
   };
 
@@ -131,7 +144,7 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
         },
       };
 
-      setComments([...comments, addedComment]);
+      setComments((prev) => [...prev, addedComment]);
       setNewComment('');
     } catch (error) {
       console.error("Erreur lors de l'ajout du commentaire:", error);
@@ -141,14 +154,16 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
   };
 
   const handleDeleteComment = async (commentId: number) => {
-    if (window.confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')) {
-      try {
-        const { commentService } = await import('@/lib/api');
-        await commentService.deleteComment(commentId);
-        setComments(comments.filter((comment) => comment.id !== commentId));
-      } catch (error) {
-        console.error('Erreur lors de la suppression du commentaire:', error);
-      }
+    if (!window.confirm('\u00CAtes-vous s\u00FBr de vouloir supprimer ce commentaire ?')) {
+      return;
+    }
+
+    try {
+      const { commentService } = await import('@/lib/api');
+      await commentService.deleteComment(commentId);
+      setComments((prev) => prev.filter((comment) => comment.id !== commentId));
+    } catch (error) {
+      console.error('Erreur lors de la suppression du commentaire:', error);
     }
   };
 
@@ -163,14 +178,12 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
     });
   };
 
-  const commentCount = post.Comments?.length || 0;
-
   return (
     <article className={styles.postCard}>
       <div className={styles.postHeader}>
         <div className={styles.userInfo}>
           <h3>
-            {post.User?.prenom} {post.User?.nom}
+            {author?.prenom} {author?.nom}
           </h3>
           <span className={styles.date}>{formatDate(post.createdAt)}</span>
         </div>
@@ -186,10 +199,14 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
         )}
       </div>
 
-      {post.title && <h2 className={styles.title}>{post.title}</h2>}
+      {post.title && post.title.trim().length > 0 && (
+        <h2 className={styles.title}>{post.title}</h2>
+      )}
       <p className={styles.content}>{post.content}</p>
 
-      {post.image && <img src={post.image} alt="Post" className={styles.image} />}
+      {imageUrl && (
+        <img src={imageUrl} alt="Illustration du post" className={styles.image} />
+      )}
 
       <div className={styles.interactions}>
         <div className={styles.reactions}>

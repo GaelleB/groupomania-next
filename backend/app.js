@@ -20,7 +20,9 @@ const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerOptions = require('./config/swagger');
 
 // Protection avec Helmet (headers HTTP sécurisés)
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 
 // Compression des réponses
 app.use(compression());

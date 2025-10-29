@@ -5,9 +5,6 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
 // Instance axios avec configuration de base
 const api = axios.create({
   baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
 
 // Intercepteur pour ajouter le token d'authentification
@@ -69,15 +66,10 @@ export const postService = {
 
   getPost: (id: string | number) => api.get(`/posts/${id}`),
 
-  createPost: (formData: FormData) =>
-    api.post('/posts/newpost', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    }),
+  createPost: (formData: FormData) => api.post('/posts/newpost', formData),
 
   updatePost: (id: string | number, formData: FormData) =>
-    api.put(`/posts/${id}`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    }),
+    api.put(`/posts/${id}`, formData),
 
   deletePost: (id: string | number) => api.delete(`/posts/${id}`),
 

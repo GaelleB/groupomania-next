@@ -35,6 +35,12 @@ export default function NewPostPage() {
     setError('');
     setLoading(true);
 
+    if (!content.trim()) {
+      setError('Le contenu est obligatoire');
+      setLoading(false);
+      return;
+    }
+
     try {
       const formData = new FormData();
       formData.append('content', content);
@@ -45,10 +51,13 @@ export default function NewPostPage() {
       await postService.createPost(formData);
 
       router.push('/posts');
+      setContent('');
+      setImage(null);
+      setImagePreview(null);
     } catch (err: unknown) {
       const responseError = err as { response?: { data?: { message?: string } } };
       setError(
-        responseError.response?.data?.message || 'Erreur lors de la création du post',
+        responseError.response?.data?.message || 'Erreur lors de la cr\u00E9ation du post',
       );
       console.error('Erreur:', err);
     } finally {
@@ -64,7 +73,7 @@ export default function NewPostPage() {
     <div className={styles.pageContainer}>
       <Header />
       <main className={styles.main}>
-        <h1>Créer un nouveau post</h1>
+        <h1>Cr\u00E9er un nouveau post</h1>
         <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
             <label htmlFor="content">Contenu *</label>
@@ -83,7 +92,7 @@ export default function NewPostPage() {
             <input type="file" id="image" onChange={handleImageChange} accept="image/*" />
             {imagePreview && (
               <div className={styles.imagePreview}>
-                <img src={imagePreview} alt="Prévisualisation" />
+                <img src={imagePreview} alt="Pr\u00E9visualisation" />
                 <button
                   type="button"
                   onClick={() => {

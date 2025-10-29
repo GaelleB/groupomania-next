@@ -1,12 +1,36 @@
 const fs = require('fs');
+const path = require('path');
 const models = require('../models');
 
-// Création d'un post
+const deleteImageIfExists = (imageUrl) => {
+  if (!imageUrl) return;
+  const parts = imageUrl.split('/images/');
+  if (parts.length !== 2) return;
+
+  const filename = parts[1];
+  const filepath = path.join('images', filename);
+
+  fs.unlink(filepath, (err) => {
+    if (err) {
+      console.error('Erreur lors de la suppression du fichier:', err);
+    }
+  });
+};
+
+// Creation d'un post
 exports.createPost = (req, res) => {
+  const rawTitle = typeof req.body.title === 'string' ? req.body.title.trim() : '';
+  const rawContent =
+    typeof req.body.content === 'string' ? req.body.content.trim() : '';
+
+  if (!rawContent) {
+    return res.status(400).json({ message: 'Le contenu est requis' });
+  }
+
   const newPost = {
     UserId: req.tokenUserId,
-    title: req.body.title,
-    content: req.body.content,
+    title: rawTitle,
+    content: rawContent,
   };
 
   if (req.file) {
@@ -14,7 +38,7 @@ exports.createPost = (req, res) => {
   }
 
   models.Post.create(newPost)
-    .then(() => res.status(201).json({ message: 'Post créé !' }))
+    .then(() => res.status(201).json({ message: 'Post cree !' }))
     .catch((error) => res.status(500).json({ error }));
 };
 
@@ -84,7 +108,14 @@ exports.getAllPosts = (req, res) => {
 // Modification d'un post (contenu)
 exports.modifyPost = (req, res) => {
   const postId = req.params.id;
-  const content = req.body.content;
+  const hasTitle = typeof req.body.title === 'string';
+  const hasContent = typeof req.body.content === 'string';
+  const cleanTitle = hasTitle ? req.body.title.trim() : undefined;
+  const cleanContent = hasContent ? req.body.content.trim() : undefined;
+  const removeImageFlag =
+    typeof req.body.removeImage === 'string' &&
+    ['true', '1', 'on', 'yes'].includes(req.body.removeImage.toLowerCase());
+
   const userIdRequest = req.tokenUserId;
 
   models.Post.findOne({ where: { id: postId } })
@@ -93,9 +124,32 @@ exports.modifyPost = (req, res) => {
         return res.status(401).json({ message: "Ce n'est pas votre message" });
       }
 
-      const updatePost = { content };
+      const updatePost = {};
+
+      if (hasTitle) {
+        updatePost.title = cleanTitle ?? '';
+      }
+
+      if (hasContent) {
+        if (!cleanContent) {
+          return res.status(400).json({ message: 'Le contenu est requis' });
+        }
+        updatePost.content = cleanContent;
+      }
+
+      const shouldDeleteExistingImage = (removeImageFlag || !!req.file) && post.image;
+      if (shouldDeleteExistingImage) {
+        deleteImageIfExists(post.image);
+      }
+
       if (req.file) {
         updatePost.image = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+      } else if (removeImageFlag) {
+        updatePost.image = null;
+      }
+
+      if (Object.keys(updatePost).length === 0) {
+        return res.status(400).json({ message: 'Aucune modification fournie' });
       }
 
       return models.Post.update(
@@ -105,7 +159,7 @@ exports.modifyPost = (req, res) => {
         },
         { where: { id: postId } },
       )
-        .then(() => res.status(200).json({ message: 'Post modifié !' }))
+        .then(() => res.status(200).json({ message: 'Post modifie !' }))
         .catch((error) => res.status(400).json({ error }));
     })
     .catch((error) => res.status(500).json({ error }));
@@ -121,18 +175,10 @@ exports.deletePost = (req, res) => {
         return res.status(401).json({ message: "Ce n'est pas votre message" });
       }
 
-      if (post.image != null) {
-        const filename = post.image.split('/images/')[1];
-        fs.unlink(`images/${filename}`, (err) => {
-          if (err) {
-            console.error('Erreur lors de la suppression du fichier:', err);
-            // Continue même si la suppression du fichier échoue
-          }
-        });
-      }
+      deleteImageIfExists(post.image);
 
       return models.Post.destroy({ where: { id: req.params.id } })
-        .then(() => res.status(201).json({ message: 'Post supprimé' }))
+        .then(() => res.status(201).json({ message: 'Post supprime' }))
         .catch((error) => res.status(500).json({ error }));
     })
     .catch((error) => res.status(500).json({ error }));

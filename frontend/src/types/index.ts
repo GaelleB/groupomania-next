@@ -9,13 +9,15 @@ export interface User {
 
 export interface Post {
   id: string;
-  userId: string;
-  title?: string;
+  userId?: string;
+  UserId?: string;
+  title?: string | null;
   content: string;
-  image?: string;
+  image?: string | null;
   createdAt: string;
   updatedAt: string;
   user?: User;
+  User?: User;
 }
 
 export interface Comment {
