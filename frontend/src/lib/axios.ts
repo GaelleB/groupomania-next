@@ -1,7 +1,24 @@
 import axios from 'axios';
 
+const resolveBaseURL = () => {
+  const envUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
+  if (envUrl) {
+    return envUrl;
+  }
+
+  if (typeof window !== 'undefined' && window.location) {
+    const { protocol, hostname, port } = window.location;
+    if (port === '3000' || port === '') {
+      return `${protocol}//${hostname}:3001/api`;
+    }
+    return `${window.location.origin.replace(/\/$/, '')}/api`;
+  }
+
+  return 'http://localhost:3001/api';
+};
+
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api',
+  baseURL: resolveBaseURL(),
 });
 
 // Intercepteur pour ajouter le token automatiquement

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -84,7 +84,7 @@ export default function LoginPage() {
             <p>
               Pas encore de compte ?{' '}
               <Link href="/signup" className={styles.link}>
-                S'inscrire
+                S&apos;inscrire
               </Link>
             </p>
           </div>
@@ -94,3 +94,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+

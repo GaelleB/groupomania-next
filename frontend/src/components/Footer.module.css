@@ -1,5 +1,5 @@
 .footer {
-  background-color: #fac4cf;
+  background-color: var(--foreground);
   padding: 2rem 0;
   text-align: center;
   margin-top: auto;
@@ -7,6 +7,7 @@
 
 .footer p {
   margin: 0;
-  color: #333;
+  color: rgba(245, 245, 245, 0.8);
   font-size: 0.9rem;
+  letter-spacing: 0.03em;
 }

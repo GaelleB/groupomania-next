@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -57,7 +57,7 @@ export default function NewPostPage() {
     } catch (err: unknown) {
       const responseError = err as { response?: { data?: { message?: string } } };
       setError(
-        responseError.response?.data?.message || 'Erreur lors de la cr\u00E9ation du post',
+        responseError.response?.data?.message || 'Erreur lors de la création du post',
       );
       console.error('Erreur:', err);
     } finally {
@@ -101,7 +101,7 @@ export default function NewPostPage() {
                   }}
                   className={styles.removeImageBtn}
                 >
-                  Supprimer l'image
+                  Supprimer l&apos;image
                 </button>
               </div>
             )}
@@ -127,3 +127,6 @@ export default function NewPostPage() {
     </div>
   );
 }
+
+
+

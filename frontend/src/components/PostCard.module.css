@@ -1,8 +1,9 @@
 .postCard {
-  background: white;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  background: var(--surface);
+  border-radius: 16px;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
 }
 
 .postHeader {
@@ -19,14 +20,14 @@
 }
 
 .avatar {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--surface);
   font-weight: 600;
   font-size: 0.9375rem;
   flex-shrink: 0;
@@ -34,13 +35,14 @@
 
 .userDetails h3 {
   margin: 0;
-  color: #050505;
-  font-size: 0.9375rem;
+  color: var(--foreground);
+  font-size: 0.975rem;
   font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .date {
-  color: #65676b;
+  color: var(--text-muted);
   font-size: 0.8125rem;
   font-weight: 400;
 }
@@ -52,47 +54,49 @@
 
 .editBtn,
 .deleteBtn {
-  padding: 0.375rem 0.75rem;
+  padding: 0.4rem 0.9rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 999px;
   cursor: pointer;
-  font-size: 0.8125rem;
-  font-weight: 500;
+  font-size: 0.82rem;
+  font-weight: 600;
   transition: all 0.2s ease;
+  letter-spacing: 0.02em;
 }
 
 .editBtn {
-  background-color: #e4e6eb;
-  color: #050505;
+  background-color: rgba(122, 30, 58, 0.1);
+  color: var(--primary);
 }
 
 .editBtn:hover {
-  background-color: #d8dadf;
+  background-color: rgba(122, 30, 58, 0.2);
 }
 
 .deleteBtn {
-  background-color: #fee2e2;
-  color: #dc2626;
+  background-color: rgba(199, 59, 74, 0.12);
+  color: var(--primary-dark);
 }
 
 .deleteBtn:hover {
-  background-color: #fecaca;
+  background-color: rgba(199, 59, 74, 0.22);
 }
 
 .title {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   padding: 0 1rem;
-  margin: 0.5rem 0;
-  color: #050505;
+  margin: 0.75rem 0;
+  color: var(--foreground);
   font-weight: 600;
+  letter-spacing: 0.01em;
 }
 
 .content {
-  color: #050505;
-  line-height: 1.3333;
-  padding: 0 1rem 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  padding: 0 1rem 1.25rem;
   white-space: pre-wrap;
-  font-size: 0.9375rem;
+  font-size: 1rem;
 }
 
 .image {
@@ -116,7 +120,7 @@
   align-items: center;
   gap: 0.375rem;
   padding: 0.25rem;
-  color: #65676b;
+  color: var(--text-muted);
   font-size: 0.875rem;
   transition: color 0.2s ease;
 }
@@ -153,7 +157,7 @@
   position: absolute;
   top: 100%;
   left: 1rem;
-  background: white;
+  background: var(--surface);
   border-radius: 8px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
   padding: 0.5rem;
@@ -172,7 +176,7 @@
 }
 
 .reactionDetailItem:hover {
-  background-color: #f0f2f5;
+  background-color: var(--background-muted);
 }
 
 .reactionDetailEmoji {
@@ -182,12 +186,12 @@
 .reactionDetailLabel {
   flex: 1;
   font-size: 0.9375rem;
-  color: #050505;
+  color: var(--foreground);
 }
 
 .reactionDetailCount {
   font-size: 0.9375rem;
-  color: #65676b;
+  color: var(--text-muted);
   font-weight: 600;
 }
 
@@ -196,7 +200,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.25rem 0.5rem;
-  border-top: 1px solid #e4e6eb;
+  border-top: 1px solid var(--border);
   margin: 0;
   position: relative;
 }
@@ -219,23 +223,23 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  color: #65676b;
+  color: var(--text-muted);
   width: 100%;
 }
 
 .reactionBtn:hover {
-  background-color: #f0f2f5;
+  background-color: var(--background-muted);
 }
 
 .reactionBtn.active {
-  color: #1877f2;
+  color: var(--primary);
 }
 
 .reactionPicker {
   position: absolute;
   bottom: 100%;
   left: 0;
-  background: white;
+  background: var(--surface);
   border-radius: 50px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
   padding: 0.375rem 0.5rem;
@@ -291,12 +295,12 @@
   align-items: center;
   justify-content: center;
   gap: 0.375rem;
-  color: #65676b;
+  color: var(--text-muted);
   flex: 1;
 }
 
 .commentToggle:hover {
-  background-color: #f0f2f5;
+  background-color: var(--background-muted);
 }
 
 .comments {
@@ -313,7 +317,7 @@
 }
 
 .commentBubble {
-  background: #f0f2f5;
+  background: var(--background-muted);
   padding: 0.5rem 0.75rem;
   border-radius: 18px;
   width: 100%;
@@ -327,7 +331,7 @@
 }
 
 .commentHeader strong {
-  color: #050505;
+  color: var(--foreground);
   font-size: 0.8125rem;
   font-weight: 600;
 }
@@ -339,7 +343,7 @@
 .commentMenuBtn {
   background: transparent;
   border: none;
-  color: #65676b;
+  color: var(--text-muted);
   font-size: 1.25rem;
   cursor: pointer;
   padding: 0.25rem 0.5rem;
@@ -349,20 +353,21 @@
 }
 
 .commentMenuBtn:hover {
-  background-color: #e4e6eb;
+  background-color: rgba(31, 31, 31, 0.08);
 }
 
 .commentMenuDropdown {
   position: absolute;
   top: 100%;
   right: 0;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  background: var(--surface);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(31, 31, 31, 0.08);
   z-index: 10;
-  min-width: 150px;
+  min-width: 170px;
   overflow: hidden;
-  margin-top: 0.25rem;
+  margin-top: 0.35rem;
 }
 
 .commentMenuDropdown button {
@@ -374,21 +379,21 @@
   text-align: left;
   cursor: pointer;
   font-size: 0.9375rem;
-  color: #050505;
+  color: var(--foreground);
   transition: background-color 0.2s ease;
 }
 
 .commentMenuDropdown button:hover {
-  background-color: #f0f2f5;
+  background-color: var(--background-muted);
 }
 
 .commentMenuDropdown button:first-child {
-  border-bottom: 1px solid #e4e6eb;
+  border-bottom: 1px solid var(--border);
 }
 
 .commentBubble p {
   margin: 0;
-  color: #050505;
+  color: var(--foreground);
   font-size: 0.9375rem;
   line-height: 1.3333;
   word-wrap: break-word;
@@ -405,7 +410,7 @@
 }
 
 .commentDate {
-  color: #65676b;
+  color: var(--text-muted);
   font-size: 0.75rem;
 }
 
@@ -416,18 +421,18 @@
 .editCommentForm textarea {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #ccd0d5;
+  border: 1px solid var(--border);
   border-radius: 12px;
   font-family: inherit;
   font-size: 0.9375rem;
   resize: vertical;
   min-height: 60px;
-  background: white;
+  background: var(--surface);
 }
 
 .editCommentForm textarea:focus {
   outline: none;
-  border-color: #1877f2;
+  border-color: var(--primary);
 }
 
 .editCommentActions {
@@ -448,26 +453,26 @@
 }
 
 .editCommentActions button:first-child {
-  background: #e4e6eb;
-  color: #050505;
+  background: rgba(31, 31, 31, 0.08);
+  color: var(--foreground);
 }
 
 .editCommentActions button:first-child:hover {
-  background: #d8dadf;
+  background: rgba(31, 31, 31, 0.15);
 }
 
 .editCommentActions button:last-child {
-  background: #1877f2;
-  color: white;
+  background: var(--primary);
+  color: var(--surface);
 }
 
 .editCommentActions button:last-child:hover {
-  background: #166fe5;
+  background: var(--primary-dark);
 }
 
 .commentsSection {
   padding: 0.5rem 0 1rem;
-  border-top: 1px solid #e4e6eb;
+  border-top: 1px solid var(--border);
 }
 
 .commentForm {
@@ -480,14 +485,14 @@
 .commentForm textarea {
   flex: 1;
   padding: 0.375rem 0.75rem;
-  border: 1px solid #ccd0d5;
+  border: 1px solid var(--border);
   border-radius: 18px;
   font-family: inherit;
   font-size: 0.875rem;
   resize: none;
   transition: all 0.2s ease;
-  background-color: #f0f2f5;
-  color: #050505;
+  background-color: var(--background-muted);
+  color: var(--foreground);
   height: 32px;
   min-height: 32px;
   max-height: 120px;
@@ -495,24 +500,24 @@
 }
 
 .commentForm textarea::placeholder {
-  color: #65676b;
+  color: var(--text-muted);
 }
 
 .commentForm textarea:focus {
   outline: none;
-  border-color: #1877f2;
-  background-color: white;
+  border-color: var(--primary);
+  background-color: var(--surface);
 }
 
 .commentForm textarea:disabled {
-  background-color: #e4e6eb;
+  background-color: rgba(31, 31, 31, 0.08);
   cursor: not-allowed;
   opacity: 0.6;
 }
 
 .commentForm button {
   padding: 0.375rem 0.875rem;
-  background: #1877f2;
+  background: var(--primary);
   color: white;
   border: none;
   border-radius: 6px;
@@ -524,11 +529,19 @@
 }
 
 .commentForm button:hover:not(:disabled) {
-  background-color: #166fe5;
+  background-color: var(--primary-dark);
 }
 
 .commentForm button:disabled {
-  background: #e4e6eb;
-  color: #bcc0c4;
+  background: rgba(31, 31, 31, 0.08);
+  color: rgba(31, 31, 31, 0.35);
   cursor: not-allowed;
 }
+
+
+
+
+
+
+
+

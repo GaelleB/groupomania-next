@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -49,7 +49,7 @@ export default function SignupPage() {
         <div className={styles.card}>
           <div className={styles.cardHeader}>
             <h1>Inscription</h1>
-            <p>Rejoignez la communauté Groupomania</p>
+            <p>Rejoignez la communautÃ© Groupomania</p>
           </div>
 
         <form onSubmit={handleSubmit} className={styles.form}>
@@ -70,7 +70,7 @@ export default function SignupPage() {
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="prenom">Prénom</label>
+                <label htmlFor="prenom">PrÃ©nom</label>
                 <input
                   id="prenom"
                   type="text"
@@ -78,7 +78,7 @@ export default function SignupPage() {
                   onChange={(e) => setPrenom(e.target.value)}
                   placeholder="Jean"
                   required
-                  aria-label="Prénom"
+                  aria-label="PrÃ©nom"
                 />
               </div>
             </div>
@@ -110,13 +110,13 @@ export default function SignupPage() {
             </div>
 
             <button type="submit" disabled={loading} className={styles.btnSave}>
-              {loading ? 'Inscription...' : 'Créer mon compte'}
+              {loading ? 'Inscription...' : 'CrÃ©er mon compte'}
             </button>
           </form>
 
           <div className={styles.footer}>
             <p>
-              Déjà un compte ?{' '}
+              DÃ©jÃ  un compte ?{' '}
               <Link href="/login" className={styles.link}>
                 Se connecter
               </Link>
@@ -128,3 +128,6 @@ export default function SignupPage() {
     </div>
   );
 }
+
+
+

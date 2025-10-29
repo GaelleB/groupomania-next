@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
@@ -10,7 +10,10 @@ import { resolveImageUrl } from '@/lib/media';
 import { Post } from '@/types';
 import styles from './edit.module.css';
 
-type PostWithRelations = Post & { userId?: number; UserId?: number };
+type PostWithRelations = Post & {
+  userId?: number;
+  UserId?: number;
+};
 
 const getOwnerId = (data: PostWithRelations | null) => {
   if (!data) return null;
@@ -38,11 +41,53 @@ export default function EditPostPage() {
   );
 
   useEffect(() => {
+    let active = true;
+
+    const fetchPost = async () => {
+      try {
+        const response = await postService.getPost(params.id as string);
+        const postData = response.data as PostWithRelations;
+
+        const ownerId = getOwnerId(postData);
+        if (user && ownerId !== null && Number(ownerId) !== Number(user.id)) {
+          alert('Vous n\'etes pas autorise a modifier ce post');
+          router.push('/posts');
+          return;
+        }
+
+        if (!active) {
+          return;
+        }
+
+        setPost(postData);
+        setContent(postData.content ?? '');
+        setRemoveExistingImage(false);
+        setImage(null);
+        setNewImagePreview((prev) => {
+          if (prev) {
+            URL.revokeObjectURL(prev);
+          }
+          return null;
+        });
+      } catch (error) {
+        console.error('Erreur lors du chargement du post :', error);
+        alert('Post introuvable');
+        router.push('/posts');
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
+
     if (params.id) {
-      loadPost();
+      fetchPost();
     }
-    // eslint-disable-next-line react-hooks-exhaustive-deps
-  }, [params.id]);
+
+    return () => {
+      active = false;
+    };
+  }, [params.id, router, user]);
 
   useEffect(() => {
     return () => {
@@ -52,46 +97,15 @@ export default function EditPostPage() {
     };
   }, [newImagePreview]);
 
-  const loadPost = async () => {
-    try {
-      const response = await postService.getPost(params.id as string);
-      const postData = response.data as PostWithRelations;
-
-      const ownerId = getOwnerId(postData);
-      if (user && ownerId !== null && Number(ownerId) !== Number(user.id)) {
-        alert("Vous n'\u00EAtes pas autoris\u00E9 \u00E0 modifier ce post");
-        router.push('/posts');
-        return;
-      }
-
-      setPost(postData);
-      setContent(postData.content ?? '');
-      setRemoveExistingImage(false);
-      setImage(null);
-      if (newImagePreview) {
-        URL.revokeObjectURL(newImagePreview);
-        setNewImagePreview(null);
-      }
-    } catch (error) {
-      console.error('Erreur lors du chargement du post:', error);
-      alert('Post introuvable');
-      router.push('/posts');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (newImagePreview) {
-      URL.revokeObjectURL(newImagePreview);
-      setNewImagePreview(null);
-    }
-
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      if (newImagePreview) {
+        URL.revokeObjectURL(newImagePreview);
+      }
       setImage(file);
-      const previewUrl = URL.createObjectURL(file);
-      setNewImagePreview(previewUrl);
+      setRemoveExistingImage(true);
+      setNewImagePreview(URL.createObjectURL(file));
     }
   };
 
@@ -111,8 +125,7 @@ export default function EditPostPage() {
     }
     setNewImagePreview(null);
     setImage(null);
-
-    if (post?.image && !removeExistingImage) {
+    if (post?.image) {
       setRemoveExistingImage(false);
     }
   };
@@ -142,7 +155,7 @@ export default function EditPostPage() {
 
       await postService.updatePost(params.id as string, formData);
 
-      router.push('/posts');
+      router.push(`/posts/${params.id}`);
     } catch (err: unknown) {
       const responseError = err as { response?: { data?: { message?: string } } };
       setError(
@@ -193,14 +206,14 @@ export default function EditPostPage() {
                   className={styles.removeImageBtn}
                   onClick={handleRemoveExistingImage}
                 >
-                  Supprimer l'image actuelle
+                  Supprimer l&apos;image actuelle
                 </button>
               </div>
             )}
 
             {newImagePreview && (
               <div className={styles.previewWrapper}>
-                <img src={newImagePreview} alt="Pr\u00E9visualisation de la nouvelle image" />
+                <img src={newImagePreview} alt="Prévisualisation de la nouvelle image" />
                 <button
                   type="button"
                   className={styles.removeImageBtn}

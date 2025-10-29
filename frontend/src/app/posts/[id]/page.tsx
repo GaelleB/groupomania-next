@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
@@ -11,7 +11,12 @@ import { resolveImageUrl } from '@/lib/media';
 import { Post } from '@/types';
 import styles from './post.module.css';
 
-type PostWithRelations = Post & { user?: { prenom: string; nom: string }; User?: { prenom: string; nom: string }; userId?: number; UserId?: number };
+type PostWithRelations = Post & {
+  user?: { prenom: string; nom: string };
+  User?: { prenom: string; nom: string };
+  userId?: number;
+  UserId?: number;
+};
 
 const getOwnerId = (data: PostWithRelations | null) => {
   if (!data) return null;
@@ -44,7 +49,7 @@ export default function PostDetailPage() {
       const response = await postService.getPost(params.id as string);
       setPost(response.data as PostWithRelations);
     } catch (error) {
-      console.error('Erreur lors du chargement du post:', error);
+      console.error('Erreur lors du chargement du post :', error);
       alert('Post introuvable');
       router.push('/posts');
     } finally {
@@ -53,13 +58,13 @@ export default function PostDetailPage() {
   };
 
   const deletePost = async () => {
-    if (!confirm('\u00CAtes-vous s\u00FBr de vouloir supprimer ce post ?')) return;
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce post ?')) return;
 
     try {
       await postService.deletePost(params.id as string);
       router.push('/posts');
     } catch (error) {
-      console.error('Erreur lors de la suppression:', error);
+      console.error('Erreur lors de la suppression :', error);
       alert('Erreur lors de la suppression du post');
     }
   };
@@ -83,9 +88,7 @@ export default function PostDetailPage() {
         <article className={styles.post}>
           <div className={styles.postHeader}>
             <div>
-              <h2>
-                {author ? ${author.prenom}  : 'Utilisateur'}
-              </h2>
+              <h2>{author ? `${author.prenom} ${author.nom}` : 'Utilisateur'}</h2>
               <span className={styles.date}>
                 {new Date(post.createdAt).toLocaleDateString('fr-FR', {
                   year: 'numeric',
@@ -99,7 +102,7 @@ export default function PostDetailPage() {
             {user?.id === Number(postOwnerId ?? undefined) && (
               <div className={styles.actions}>
                 <button
-                  onClick={() => router.push(/posts//edit)}
+                  onClick={() => router.push(`/posts/${post.id}/edit`)}
                   className={styles.editBtn}
                 >
                   Modifier
@@ -130,7 +133,7 @@ export default function PostDetailPage() {
         </article>
 
         <button onClick={() => router.back()} className={styles.backBtn}>
-          \u2190 Retour
+          ? Retour
         </button>
       </main>
       <Footer />
