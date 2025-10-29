@@ -85,14 +85,21 @@ export default function PostsPage() {
     return null;
   }
 
+  const getInitials = (prenom?: string, nom?: string) => {
+    if (!prenom && !nom) return '??';
+    const first = prenom?.charAt(0).toUpperCase() || '';
+    const last = nom?.charAt(0).toUpperCase() || '';
+    return `${first}${last}`;
+  };
+
   return (
     <div className={styles.pageContainer}>
       <Header />
       <main className={styles.main}>
         <div className={styles.header}>
-          <h1>Fil d'actualité</h1>
+          <div className={styles.avatar}>{getInitials(user?.prenom, user?.nom)}</div>
           <Link href="/posts/new" className={styles.newPostBtn}>
-            Nouveau post
+            Quoi de neuf, {user?.prenom} ?
           </Link>
         </div>
 
