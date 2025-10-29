@@ -5,7 +5,9 @@ import styles from './Footer.module.css';
 export default function Footer() {
   return (
     <footer className={styles.footer}>
-      <p>&copy; {new Date().getFullYear()} Groupomania - Réseau social d&apos;entreprise</p>
+      <p>
+        &copy; {new Date().getFullYear()} Groupomania - Réseau social d'entreprise
+      </p>
     </footer>
   );
 }

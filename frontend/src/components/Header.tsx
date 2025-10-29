@@ -16,7 +16,7 @@ export default function Header() {
 
         {user && (
           <nav className={styles.nav}>
-            <Link href="/posts">Fil d&apos;actualité</Link>
+            <Link href="/posts">Fil d'actualité</Link>
             <Link href="/posts/new">Nouveau post</Link>
             <Link href="/profile">Mon profil</Link>
             <button onClick={logout} className={styles.logoutBtn}>

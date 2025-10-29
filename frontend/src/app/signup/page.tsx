@@ -27,10 +27,17 @@ export default function SignupPage() {
       await signup(nom, prenom, email, password);
       router.push('/posts');
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { message?: string; error?: string } } };
-      const errorMessage = error.response?.data?.message || error.response?.data?.error || 'Erreur lors de l\'inscription';
+      const responseError = err as {
+        response?: { data?: { message?: string; error?: string } };
+      };
+      const errorMessage =
+        responseError.response?.data?.message ??
+        responseError.response?.data?.error ??
+        "Erreur lors de l'inscription";
+
       setError(errorMessage);
-      console.error('Erreur d\'inscription:', err);
+      console.error("Erreur d'inscription:", err);
+    } finally {
       setLoading(false);
     }
   };
@@ -45,12 +52,8 @@ export default function SignupPage() {
             <p>Rejoignez la communauté Groupomania</p>
           </div>
 
-          <form onSubmit={handleSubmit} className={styles.form}>
-            {error && (
-              <div className={styles.alert}>
-                ⚠️ {error}
-              </div>
-            )}
+        <form onSubmit={handleSubmit} className={styles.form}>
+            {error && <div className={styles.alert}>Attention : {error}</div>}
 
             <div className={styles.formRow}>
               <div className={styles.formGroup}>
@@ -100,7 +103,7 @@ export default function SignupPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder="********"
                 required
                 aria-label="Mot de passe"
               />
@@ -112,7 +115,12 @@ export default function SignupPage() {
           </form>
 
           <div className={styles.footer}>
-            <p>Déjà un compte ? <Link href="/login" className={styles.link}>Se connecter</Link></p>
+            <p>
+              Déjà un compte ?{' '}
+              <Link href="/login" className={styles.link}>
+                Se connecter
+              </Link>
+            </p>
           </div>
         </div>
       </main>

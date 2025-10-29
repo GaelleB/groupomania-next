@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(JSON.parse(storedUser));
       }
     } catch (error) {
-      console.error('Erreur parsing user:', error);
+      console.error('Erreur de lecture du profil:', error);
       localStorage.removeItem('user');
       localStorage.removeItem('token');
     }
@@ -64,9 +64,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(data.user || { id: data.userId, nom, prenom, email });
 
       localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user || { id: data.userId, nom, prenom, email }));
+      localStorage.setItem(
+        'user',
+        JSON.stringify(data.user || { id: data.userId, nom, prenom, email }),
+      );
     } catch (error) {
-      console.error('Erreur lors de l\'inscription:', error);
+      console.error("Erreur lors de l'inscription:", error);
       throw error;
     }
   };

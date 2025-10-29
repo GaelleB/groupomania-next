@@ -33,7 +33,7 @@ export default function Home() {
             Se connecter
           </Link>
           <Link href="/signup" className={styles.button}>
-            S&apos;inscrire
+            S'inscrire
           </Link>
         </div>
       </main>

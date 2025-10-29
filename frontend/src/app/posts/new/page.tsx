@@ -22,7 +22,6 @@ export default function NewPostPage() {
       const file = e.target.files[0];
       setImage(file);
 
-      // Créer une prévisualisation
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -39,15 +38,20 @@ export default function NewPostPage() {
     try {
       const formData = new FormData();
       formData.append('content', content);
-      if (image) formData.append('image', image);
+      if (image) {
+        formData.append('image', image);
+      }
 
       await postService.createPost(formData);
 
       router.push('/posts');
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { message?: string } } };
-      setError(error.response?.data?.message || 'Erreur lors de la création du post');
+      const responseError = err as { response?: { data?: { message?: string } } };
+      setError(
+        responseError.response?.data?.message || 'Erreur lors de la création du post',
+      );
       console.error('Erreur:', err);
+    } finally {
       setLoading(false);
     }
   };
@@ -76,12 +80,7 @@ export default function NewPostPage() {
 
           <div className={styles.formGroup}>
             <label htmlFor="image">Image (optionnel)</label>
-            <input
-              type="file"
-              id="image"
-              onChange={handleImageChange}
-              accept="image/*"
-            />
+            <input type="file" id="image" onChange={handleImageChange} accept="image/*" />
             {imagePreview && (
               <div className={styles.imagePreview}>
                 <img src={imagePreview} alt="Prévisualisation" />
@@ -93,17 +92,13 @@ export default function NewPostPage() {
                   }}
                   className={styles.removeImageBtn}
                 >
-                  Supprimer l&apos;image
+                  Supprimer l'image
                 </button>
               </div>
             )}
           </div>
 
-          {error && (
-            <div className={styles.alert}>
-              ⚠️ {error}
-            </div>
-          )}
+          {error && <div className={styles.alert}>Attention : {error}</div>}
 
           <div className={styles.actions}>
             <button type="submit" disabled={loading} className={styles.submitBtn}>

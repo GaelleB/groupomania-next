@@ -30,7 +30,7 @@ export default function ProfilePage() {
       <Header />
       <main className={styles.main}>
         <div className={styles.profileCard}>
-          <h1>Mon Profil</h1>
+          <h1>Mon profil</h1>
 
           <div className={styles.info}>
             <div className={styles.infoItem}>

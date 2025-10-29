@@ -90,14 +90,16 @@ export default function PostsPage() {
       <Header />
       <main className={styles.main}>
         <div className={styles.header}>
-          <h1>Fil d&apos;actualité</h1>
+          <h1>Fil d'actualité</h1>
           <Link href="/posts/new" className={styles.newPostBtn}>
             Nouveau post
           </Link>
         </div>
 
         {posts.length === 0 ? (
-          <p className={styles.noPosts}>Aucun post pour le moment. Soyez le premier à publier !</p>
+          <p className={styles.noPosts}>
+            Aucun post pour le moment. Soyez le premier à publier !
+          </p>
         ) : (
           <div className={styles.postsContainer}>
             {posts.map((post) => (

@@ -1,56 +1,56 @@
-# Migration Vue.js → React/Next.js
+# Migration Vue.js -> React/Next.js
 
 ## Structure des branches
 
-### 🌿 `vue-legacy`
-Code original du projet (Mai 2022) - Projet 7 OpenClassrooms
+### Branche `vue-legacy`
+Code original du projet (mai 2022) - Projet 7 OpenClassrooms
 
-**Stack technique:**
-- **Frontend:** Vue.js 3 + Vuex + Vue Router + Vuetify
-- **Backend:** Node.js + Express + Sequelize + MySQL
+**Stack technique :**
+- **Frontend :** Vue.js 3 + Vuex + Vue Router + Vuetify
+- **Backend :** Node.js + Express + Sequelize + MySQL
 
-**Fonctionnalités:**
-- Authentification utilisateur (signup/login)
+**Fonctionnalités :**
+- Authentification utilisateur (inscription/connexion)
 - Création et modification de posts
 - Système de commentaires
 - Likes et dislikes
 - Profil utilisateur
 
-### 🚀 `master`
-Code React/Next.js stable (Octobre 2025)
+### Branche `master`
+Code React/Next.js stable (octobre 2025)
 
-**Stack technique:**
-- **Frontend:** Next.js 15 + React 19 + TypeScript + Tailwind CSS
-- **Backend:** Node.js + Express + Sequelize + MySQL
+**Stack technique :**
+- **Frontend :** Next.js 15 + React 19 + TypeScript + Tailwind CSS
+- **Backend :** Node.js + Express + Sequelize + MySQL
 
-**Améliorations vs Vue.js:**
-- TypeScript pour la sécurité du typage
+**Améliorations vs Vue.js :**
+- Ajout de TypeScript pour sécuriser le typage
 - Next.js 15 avec App Router (SSR, SSG)
-- Sécurité renforcée (helmet, rate limiting, validation)
+- Sécurité renforcée (Helmet, rate limiting, validation)
 - Système de logging avec Winston
 - Documentation API avec Swagger
 - Tests unitaires avec Jest
 - CI/CD avec GitHub Actions
 - Optimisation des images avec Sharp
 
-### 🔧 `react-migration`
-Branche de développement pour la migration React
+### Branche `react-migration`
+Branche de développement active pour la migration React
 
 ## Chronologie
 
-- **Mai 2022** : Projet initial avec Vue.js 3
-- **Octobre 2025** : Migration vers React/Next.js 15
+- **Mai 2022** : projet initial avec Vue.js 3
+- **Octobre 2025** : migration vers React/Next.js 15
   - Réarchitecture complète du frontend
   - Ajout de TypeScript
   - Implémentation des bonnes pratiques de sécurité
-  - Mise en place de tests et CI/CD
+  - Mise en place de tests et de la CI/CD
 
 ## Raisons de la migration
 
-1. **TypeScript** : Meilleure maintenabilité et moins d'erreurs
+1. **TypeScript** : meilleure maintenabilité et moins d'erreurs
 2. **Next.js** : SEO, performances (SSR/SSG), routing optimisé
-3. **Écosystème React** : Plus grande communauté et librairies
-4. **Modernisation** : Stack technique plus récente et pérenne
+3. **Écosystème React** : communauté plus large et nombreuses librairies
+4. **Modernisation** : stack technique plus récente et pérenne
 
 ## Comment naviguer entre les branches
 
@@ -67,7 +67,7 @@ git checkout react-migration
 
 ## Backend
 
-Le backend est resté similaire entre les deux versions, avec ajout de :
+Le backend reste globalement identique entre les deux versions, avec plusieurs ajouts :
 - Validation robuste avec express-validator
 - Logging professionnel
 - Documentation Swagger

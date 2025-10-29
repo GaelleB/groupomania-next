@@ -33,7 +33,7 @@ export default function EditPostPage() {
       const postData = response.data;
 
       if (user && postData.userId !== user.id) {
-        alert('Vous n\'êtes pas autorisé à modifier ce post');
+        alert("Vous n'êtes pas autorisé à modifier ce post");
         router.push('/posts');
         return;
       }
@@ -63,7 +63,9 @@ export default function EditPostPage() {
     try {
       const formData = new FormData();
       formData.append('content', content);
-      if (image) formData.append('image', image);
+      if (image) {
+        formData.append('image', image);
+      }
 
       await axios.put(`/posts/${params.id}`, formData, {
         headers: {
@@ -73,8 +75,11 @@ export default function EditPostPage() {
 
       router.push(`/posts/${params.id}`);
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { message?: string } } };
-      setError(error.response?.data?.message || 'Erreur lors de la modification du post');
+      const responseError = err as { response?: { data?: { message?: string } } };
+      setError(
+        responseError.response?.data?.message ||
+          'Erreur lors de la modification du post',
+      );
       console.error('Erreur:', err);
     } finally {
       setSubmitting(false);
@@ -109,22 +114,13 @@ export default function EditPostPage() {
 
           <div className={styles.formGroup}>
             <label htmlFor="image">Nouvelle image (optionnel)</label>
-            <input
-              type="file"
-              id="image"
-              onChange={handleImageChange}
-              accept="image/*"
-            />
+            <input type="file" id="image" onChange={handleImageChange} accept="image/*" />
             {post.image && !image && (
               <p className={styles.currentImage}>Image actuelle : {post.image}</p>
             )}
           </div>
 
-          {error && (
-            <div className={styles.alert}>
-              ⚠️ {error}
-            </div>
-          )}
+          {error && <div className={styles.alert}>Attention : {error}</div>}
 
           <div className={styles.actions}>
             <button type="submit" disabled={submitting} className={styles.submitBtn}>

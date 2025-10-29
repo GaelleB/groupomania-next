@@ -45,7 +45,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className={styles.form}>
             {error && (
               <div className={styles.alert}>
-                ⚠️ {error}
+                Attention : {error}
               </div>
             )}
 
@@ -69,7 +69,7 @@ export default function LoginPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder="********"
                 required
                 aria-label="Mot de passe"
               />
@@ -81,7 +81,12 @@ export default function LoginPage() {
           </form>
 
           <div className={styles.footer}>
-            <p>Pas encore de compte ? <Link href="/signup" className={styles.link}>S&apos;inscrire</Link></p>
+            <p>
+              Pas encore de compte ?{' '}
+              <Link href="/signup" className={styles.link}>
+                S'inscrire
+              </Link>
+            </p>
           </div>
         </div>
       </main>

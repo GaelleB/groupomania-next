@@ -58,8 +58,8 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
   const [newComment, setNewComment] = useState('');
   const [addingComment, setAddingComment] = useState(false);
 
-  const isLiked = likes.some(like => like.UserId === user?.id);
-  const isDisliked = dislikes.some(dislike => dislike.UserId === user?.id);
+  const isLiked = likes.some((like) => like.UserId === user?.id);
+  const isDisliked = dislikes.some((dislike) => dislike.UserId === user?.id);
   const isOwner = user?.id === post.UserId;
 
   const handleLike = async () => {
@@ -67,11 +67,11 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
       await postService.likePost(post.id);
 
       if (isLiked) {
-        setLikes(likes.filter(like => like.UserId !== user?.id));
+        setLikes(likes.filter((like) => like.UserId !== user?.id));
       } else {
         setLikes([...likes, { PostId: post.id, UserId: user!.id }]);
         if (isDisliked) {
-          setDislikes(dislikes.filter(dislike => dislike.UserId !== user?.id));
+          setDislikes(dislikes.filter((dislike) => dislike.UserId !== user?.id));
         }
       }
     } catch (error) {
@@ -84,11 +84,11 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
       await postService.dislikePost(post.id);
 
       if (isDisliked) {
-        setDislikes(dislikes.filter(dislike => dislike.UserId !== user?.id));
+        setDislikes(dislikes.filter((dislike) => dislike.UserId !== user?.id));
       } else {
         setDislikes([...dislikes, { PostId: post.id, UserId: user!.id }]);
         if (isLiked) {
-          setLikes(likes.filter(like => like.UserId !== user?.id));
+          setLikes(likes.filter((like) => like.UserId !== user?.id));
         }
       }
     } catch (error) {
@@ -97,7 +97,7 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
   };
 
   const handleDelete = async () => {
-    if (window.confirm('�tes-vous s�r de vouloir supprimer ce post ?')) {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer ce post ?')) {
       try {
         await postService.deletePost(post.id);
         onDelete?.();
@@ -116,10 +116,9 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
       const { commentService } = await import('@/lib/api');
       const response = await commentService.createComment({
         postId: post.id,
-        content: newComment
+        content: newComment,
       });
 
-      // Ajouter le nouveau commentaire à la liste
       const addedComment: Comment = {
         id: response.data.data?.id || Date.now(),
         content: newComment,
@@ -128,14 +127,14 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
         User: {
           nom: user.nom,
           prenom: user.prenom,
-          id: user.id
-        }
+          id: user.id,
+        },
       };
 
       setComments([...comments, addedComment]);
       setNewComment('');
     } catch (error) {
-      console.error('Erreur lors de l\'ajout du commentaire:', error);
+      console.error("Erreur lors de l'ajout du commentaire:", error);
     } finally {
       setAddingComment(false);
     }
@@ -146,7 +145,7 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
       try {
         const { commentService } = await import('@/lib/api');
         await commentService.deleteComment(commentId);
-        setComments(comments.filter(comment => comment.id !== commentId));
+        setComments(comments.filter((comment) => comment.id !== commentId));
       } catch (error) {
         console.error('Erreur lors de la suppression du commentaire:', error);
       }
@@ -160,21 +159,29 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
       month: 'long',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
+
+  const commentCount = post.Comments?.length || 0;
 
   return (
     <article className={styles.postCard}>
       <div className={styles.postHeader}>
         <div className={styles.userInfo}>
-          <h3>{post.User?.prenom} {post.User?.nom}</h3>
+          <h3>
+            {post.User?.prenom} {post.User?.nom}
+          </h3>
           <span className={styles.date}>{formatDate(post.createdAt)}</span>
         </div>
         {isOwner && (
           <div className={styles.actions}>
-            <button onClick={onUpdate} className={styles.editBtn}>Modifier</button>
-            <button onClick={handleDelete} className={styles.deleteBtn}>Supprimer</button>
+            <button onClick={onUpdate} className={styles.editBtn}>
+              Modifier
+            </button>
+            <button onClick={handleDelete} className={styles.deleteBtn}>
+              Supprimer
+            </button>
           </div>
         )}
       </div>
@@ -182,21 +189,21 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
       {post.title && <h2 className={styles.title}>{post.title}</h2>}
       <p className={styles.content}>{post.content}</p>
 
-      {post.image && (
-        <img src={post.image} alt="Post" className={styles.image} />
-      )}
+      {post.image && <img src={post.image} alt="Post" className={styles.image} />}
 
       <div className={styles.interactions}>
         <div className={styles.reactions}>
           <button
             onClick={handleLike}
             className={`${styles.likeBtn} ${isLiked ? styles.active : ''}`}
+            aria-pressed={isLiked}
           >
             👍 {likes.length}
           </button>
           <button
             onClick={handleDislike}
             className={`${styles.dislikeBtn} ${isDisliked ? styles.active : ''}`}
+            aria-pressed={isDisliked}
           >
             👎 {dislikes.length}
           </button>
@@ -205,8 +212,9 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
         <button
           onClick={() => setShowComments(!showComments)}
           className={styles.commentToggle}
+          aria-expanded={showComments}
         >
-          💬 {post.Comments?.length || 0} commentaire{(post.Comments?.length || 0) > 1 ? 's' : ''}
+          💬 {commentCount} commentaire{commentCount > 1 ? 's' : ''}
         </button>
       </div>
 
@@ -214,10 +222,12 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
         <div className={styles.commentsSection}>
           {comments.length > 0 && (
             <div className={styles.comments}>
-              {comments.map(comment => (
+              {comments.map((comment) => (
                 <div key={comment.id} className={styles.comment}>
                   <div className={styles.commentHeader}>
-                    <strong>{comment.User?.prenom} {comment.User?.nom}</strong>
+                    <strong>
+                      {comment.User?.prenom} {comment.User?.nom}
+                    </strong>
                     {user?.id === comment.UserId && (
                       <button
                         onClick={() => handleDeleteComment(comment.id)}
