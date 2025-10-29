@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -35,40 +36,54 @@ export default function LoginPage() {
     <div className={styles.pageContainer}>
       <Header />
       <main className={styles.login}>
-        <h1>Connexion</h1>
-        <p>Veuillez saisir votre email et votre mot de passe</p>
-        <form onSubmit={handleSubmit}>
-          <ul>
-            <li>
+        <div className={styles.card}>
+          <div className={styles.cardHeader}>
+            <h1>Connexion</h1>
+            <p>Content de vous revoir !</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className={styles.form}>
+            {error && (
+              <div className={styles.alert}>
+                ⚠️ {error}
+              </div>
+            )}
+
+            <div className={styles.formGroup}>
+              <label htmlFor="email">Email</label>
               <input
+                id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Adresse email"
+                placeholder="votre.email@groupomania.com"
                 required
                 aria-label="Email de connexion"
               />
-            </li>
-            <li>
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor="password">Mot de passe</label>
               <input
+                id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Mot de passe"
+                placeholder="••••••••"
                 required
                 aria-label="Mot de passe"
               />
-            </li>
-          </ul>
-          {error && (
-            <div className={styles.alert}>
-              ⚠️ {error}
             </div>
-          )}
-          <button type="submit" disabled={loading} className={styles.btnSave}>
-            {loading ? 'Connexion...' : 'Valider'}
-          </button>
-        </form>
+
+            <button type="submit" disabled={loading} className={styles.btnSave}>
+              {loading ? 'Connexion...' : 'Se connecter'}
+            </button>
+          </form>
+
+          <div className={styles.footer}>
+            <p>Pas encore de compte ? <Link href="/signup" className={styles.link}>S&apos;inscrire</Link></p>
+          </div>
+        </div>
       </main>
       <Footer />
     </div>

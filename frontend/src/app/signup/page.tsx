@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -24,15 +25,12 @@ export default function SignupPage() {
 
     try {
       await signup(nom, prenom, email, password);
-      // Seulement rediriger si l'inscription réussit
       router.push('/posts');
     } catch (err: unknown) {
-      // Extraire le message d'erreur du backend
       const error = err as { response?: { data?: { message?: string; error?: string } } };
       const errorMessage = error.response?.data?.message || error.response?.data?.error || 'Erreur lors de l\'inscription';
       setError(errorMessage);
       console.error('Erreur d\'inscription:', err);
-      // NE PAS rediriger en cas d'erreur - rester sur la page pour afficher l'erreur
       setLoading(false);
     }
   };
@@ -41,60 +39,82 @@ export default function SignupPage() {
     <div className={styles.pageContainer}>
       <Header />
       <main className={styles.signup}>
-        <h1>Inscription</h1>
-        <p>Créez votre compte</p>
-        <form onSubmit={handleSubmit}>
-          <ul>
-            <li>
+        <div className={styles.card}>
+          <div className={styles.cardHeader}>
+            <h1>Inscription</h1>
+            <p>Rejoignez la communauté Groupomania</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className={styles.form}>
+            {error && (
+              <div className={styles.alert}>
+                ⚠️ {error}
+              </div>
+            )}
+
+            <div className={styles.formRow}>
+              <div className={styles.formGroup}>
+                <label htmlFor="nom">Nom</label>
+                <input
+                  id="nom"
+                  type="text"
+                  value={nom}
+                  onChange={(e) => setNom(e.target.value)}
+                  placeholder="Dupont"
+                  required
+                  aria-label="Nom"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="prenom">Prénom</label>
+                <input
+                  id="prenom"
+                  type="text"
+                  value={prenom}
+                  onChange={(e) => setPrenom(e.target.value)}
+                  placeholder="Jean"
+                  required
+                  aria-label="Prénom"
+                />
+              </div>
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor="email">Email</label>
               <input
-                type="text"
-                value={nom}
-                onChange={(e) => setNom(e.target.value)}
-                placeholder="Nom"
-                required
-                aria-label="Nom"
-              />
-            </li>
-            <li>
-              <input
-                type="text"
-                value={prenom}
-                onChange={(e) => setPrenom(e.target.value)}
-                placeholder="Prénom"
-                required
-                aria-label="Prénom"
-              />
-            </li>
-            <li>
-              <input
+                id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Adresse email"
+                placeholder="jean.dupont@groupomania.com"
                 required
                 aria-label="Email"
               />
-            </li>
-            <li>
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor="password">Mot de passe</label>
               <input
+                id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Mot de passe"
+                placeholder="••••••••"
                 required
                 aria-label="Mot de passe"
               />
-            </li>
-          </ul>
-          {error && (
-            <div className={styles.alert}>
-              ⚠️ {error}
             </div>
-          )}
-          <button type="submit" disabled={loading} className={styles.btnSave}>
-            {loading ? 'Inscription...' : 'S\'inscrire'}
-          </button>
-        </form>
+
+            <button type="submit" disabled={loading} className={styles.btnSave}>
+              {loading ? 'Inscription...' : 'Créer mon compte'}
+            </button>
+          </form>
+
+          <div className={styles.footer}>
+            <p>Déjà un compte ? <Link href="/login" className={styles.link}>Se connecter</Link></p>
+          </div>
+        </div>
       </main>
       <Footer />
     </div>
