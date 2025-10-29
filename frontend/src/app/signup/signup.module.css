@@ -78,22 +78,22 @@
 
 .formGroup input {
   padding: 0.875rem 1rem;
-  border: 2px solid var(--gray-200);
+  border: 1px solid #ccd0d5;
   border-radius: 12px;
   font-size: 1rem;
   transition: all 0.2s;
-  background: var(--gray-50);
+  background: #f0f2f5;
+  color: #050505;
 }
 
 .formGroup input:focus {
   outline: none;
-  border-color: var(--primary);
+  border-color: #1877f2;
   background: white;
-  box-shadow: 0 0 0 3px rgba(250, 196, 207, 0.1);
 }
 
 .formGroup input::placeholder {
-  color: var(--gray-400);
+  color: #65676b;
 }
 
 .btnSave {
