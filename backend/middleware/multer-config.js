@@ -13,10 +13,13 @@ const storage = multer.diskStorage({
         callback(null, 'images');
     },
     filename: (req, file, callback) => {
+        // Retirer l'extension du nom original
+        const nameWithoutExt = file.originalname.replace(/\.[^/.]+$/, '');
+
         // Nettoyer le nom de fichier pour éviter les attaques path traversal
-        const safeName = file.originalname
-            .replace(/[^a-zA-Z0-9.-]/g, '_')  // Remplacer tous les caractères non alphanumériques
-            .replace(/\.+/g, '.')              // Éviter les doubles points
+        const safeName = nameWithoutExt
+            .replace(/[^a-zA-Z0-9-]/g, '_')    // Remplacer tous les caractères non alphanumériques
+            .replace(/_+/g, '_')               // Éviter les underscores multiples
             .substring(0, 50);                 // Limiter la longueur
 
         const extension = MIME_TYPES[file.mimetype];
