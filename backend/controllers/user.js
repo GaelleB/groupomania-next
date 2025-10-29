@@ -9,14 +9,15 @@ const User = models.User;
 // Enregistrement d'un compte
 exports.signup = (req, res, next) => {
     // Vérifier si les données sont correcte
-    const regexText = /^[a-zA-Z-\s]{2,}$/;
+    // Accepte les lettres avec accents (unicode), espaces et tirets
+    const regexText = /^[a-zA-ZÀ-ÿ\u00C0-\u017F-\s]{2,}$/;
     const regexEmail = /^([a-zA-Z0-9.-_]+)@((?:[a-zA-Z0-9.-_]+.)+)([a-zA-Z]{2,4})/;
 
     if (regexText.test(req.body.nom) === false) {
-        return res.status(401).json({message: "Votre nom doit comporter au minimum 2 lettre et ne doit pas comporter de chiffres ou de caractères spéciaux autre que -"})
+        return res.status(401).json({message: "Votre nom doit comporter au minimum 2 lettres et ne doit pas comporter de chiffres"})
     }
     else if (regexText.test(req.body.prenom) === false) {
-        return res.status(401).json({message: "Votre prenom doit comporter au minimum 2 lettre et ne doit pas comporter de chiffres ou de caractères spéciaux autre que -"})
+        return res.status(401).json({message: "Votre prénom doit comporter au minimum 2 lettres et ne doit pas comporter de chiffres"})
     }
     else if (regexEmail.test(req.body.email) === false) {
         return res.status(401).json({message: "Ce format d'email n'est pas valide"})
