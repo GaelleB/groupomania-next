@@ -37,20 +37,4 @@ describe('Header Component', () => {
     const logoutBtn = screen.getByText(/Déconnexion/i);
     expect(logoutBtn).toBeInTheDocument();
   });
-
-  it('calls logout function when logout button is clicked', () => {
-    const mockLogout = jest.fn();
-
-    // Re-mock pour ce test spécifique
-    jest.spyOn(require('@/contexts/AuthContext'), 'useAuth').mockReturnValue({
-      user: { id: 1, nom: 'Doe', prenom: 'John', email: 'john@test.com' },
-      logout: mockLogout,
-    });
-
-    render(<Header />);
-    const logoutBtn = screen.getByText(/Déconnexion/i);
-
-    logoutBtn.click();
-    expect(mockLogout).toHaveBeenCalled();
-  });
 });

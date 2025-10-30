@@ -76,7 +76,7 @@ export const authService = {
 
 // Services pour les posts
 export const postService = {
-  getAllPosts: () => api.get('/posts'),
+  getAllPosts: (page = 1, limit = 10) => api.get(`/posts?page=${page}&limit=${limit}`),
 
   getPost: (id: string | number) => api.get(`/posts/${id}`),
 

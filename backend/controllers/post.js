@@ -82,10 +82,19 @@ exports.getOnePost = (req, res) => {
 };
 
 // Affichage de tous les posts
-exports.getAllPosts = (req, res) => {
-  models.Post.findAll({
-    order: [['id', 'DESC']],
-    include: [
+exports.getAllPosts = async (req, res) => {
+  try {
+    // Pagination parameters
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    // Validate pagination params
+    if (page < 1 || limit < 1 || limit > 100) {
+      return res.status(400).json({ error: 'Invalid pagination parameters' });
+    }
+
+    const includeOptions = [
       {
         model: models.User,
         as: 'User',
@@ -113,10 +122,38 @@ exports.getAllPosts = (req, res) => {
           },
         ],
       },
-    ],
-  })
-    .then((post) => res.status(200).json(post))
-    .catch((error) => res.status(400).json({ error }));
+    ];
+
+    // Get total count
+    const total = await models.Post.count();
+
+    // Get paginated posts
+    const posts = await models.Post.findAll({
+      order: [['id', 'DESC']],
+      include: includeOptions,
+      limit,
+      offset,
+    });
+
+    // Calculate total pages
+    const totalPages = Math.ceil(total / limit);
+
+    // Return paginated response
+    return res.status(200).json({
+      data: posts,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1,
+      },
+    });
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    return res.status(400).json({ error: error.message });
+  }
 };
 
 // Modification d'un post (contenu)
