@@ -41,7 +41,7 @@
    - `DB_PASSWORD`: [password de votre MySQL]
    - `DB_NAME`: [database name de votre MySQL]
    - `JWT_SECRET`: [générez une clé secrète aléatoire, ex: `openssl rand -base64 32`]
-   - `PORT`: `3000`
+   - `PORT`: `3001` (ou laissez vide, Render définira automatiquement)
 
 5. Cliquez sur "Create Web Service"
 

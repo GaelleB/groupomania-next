@@ -112,7 +112,7 @@ router.post('/upload', multer, optimizeImage, controller.upload);
 
 ### Swagger/OpenAPI
 - **Configuration**: `backend/config/swagger.js`
-- **URL**: `http://localhost:3000/api-docs` (dev uniquement)
+- **URL**: `http://localhost:3001/api-docs` (dev uniquement)
 - **Fonctionnalités**:
   - Documentation interactive
   - Test des endpoints
@@ -254,7 +254,7 @@ npm run format:check
 
 - [SECURITY_FIXES.md](./SECURITY_FIXES.md) - Corrections de sécurité
 - [README.md](./README.md) - Documentation principale
-- [API Documentation](http://localhost:3000/api-docs) - Swagger UI
+- [API Documentation](http://localhost:3001/api-docs) - Swagger UI
 
 ---
 
