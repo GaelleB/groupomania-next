@@ -51,10 +51,8 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // CORS - Configuration sécurisée avec whitelist
 const allowedOrigins = [
-  process.env.FRONTEND_URL || 'http://localhost:3001',
-  'http://localhost:3001',
+  process.env.FRONTEND_URL || 'http://localhost:3000',
   'http://localhost:3000',
-  'http://localhost:3002',
 ];
 
 app.use((req, res, next) => {
