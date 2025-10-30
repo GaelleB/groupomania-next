@@ -4,49 +4,8 @@ import { useMemo, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { postService } from '@/lib/api';
 import { resolveImageUrl } from '@/lib/media';
+import { Post, Like, Dislike, Comment } from '@/lib/types';
 import styles from './PostCard.module.css';
-
-interface Like {
-  PostId: number;
-  UserId: number;
-}
-
-interface Dislike {
-  PostId: number;
-  UserId: number;
-}
-
-interface Comment {
-  id: number;
-  content: string;
-  UserId: number;
-  PostId: number;
-  User?: {
-    nom: string;
-    prenom: string;
-    id: number;
-  };
-}
-
-interface Post {
-  id: number;
-  title?: string | null;
-  content: string;
-  image?: string | null;
-  UserId: number;
-  User?: {
-    nom: string;
-    prenom: string;
-  };
-  user?: {
-    nom: string;
-    prenom: string;
-  };
-  Likes?: Like[];
-  Dislikes?: Dislike[];
-  Comments?: Comment[];
-  createdAt: string;
-}
 
 interface PostCardProps {
   post: Post;

@@ -8,45 +8,8 @@ import Footer from '@/components/Footer';
 import PostCard from '@/components/PostCard';
 import Link from 'next/link';
 import { postService } from '@/lib/api';
+import { Post } from '@/lib/types';
 import styles from './posts.module.css';
-
-interface Like {
-  PostId: number;
-  UserId: number;
-}
-
-interface Dislike {
-  PostId: number;
-  UserId: number;
-}
-
-interface Comment {
-  id: number;
-  content: string;
-  UserId: number;
-  PostId: number;
-  User?: {
-    nom: string;
-    prenom: string;
-    id: number;
-  };
-}
-
-interface Post {
-  id: number;
-  title?: string;
-  content: string;
-  image?: string;
-  UserId: number;
-  User?: {
-    nom: string;
-    prenom: string;
-  };
-  Likes?: Like[];
-  Dislikes?: Dislike[];
-  Comments?: Comment[];
-  createdAt: string;
-}
 
 export default function PostsPage() {
   const { user, loading: authLoading } = useAuth();

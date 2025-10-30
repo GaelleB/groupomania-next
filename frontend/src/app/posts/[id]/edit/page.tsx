@@ -7,26 +7,19 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { postService } from '@/lib/api';
 import { resolveImageUrl } from '@/lib/media';
-import { Post } from '@/types';
+import { Post } from '@/lib/types';
 import styles from './edit.module.css';
 
-type PostWithRelations = Post & {
-  userId?: number;
-  UserId?: number;
-};
-
-const getOwnerId = (data: PostWithRelations | null) => {
+const getOwnerId = (data: Post | null) => {
   if (!data) return null;
-  if (data.userId !== undefined && data.userId !== null) return Number(data.userId);
-  if (data.UserId !== undefined && data.UserId !== null) return Number(data.UserId);
-  return null;
+  return data.UserId;
 };
 
 export default function EditPostPage() {
   const params = useParams();
   const router = useRouter();
   const { user } = useAuth();
-  const [post, setPost] = useState<PostWithRelations | null>(null);
+  const [post, setPost] = useState<Post | null>(null);
   const [content, setContent] = useState('');
   const [image, setImage] = useState<File | null>(null);
   const [newImagePreview, setNewImagePreview] = useState<string | null>(null);
@@ -46,10 +39,10 @@ export default function EditPostPage() {
     const fetchPost = async () => {
       try {
         const response = await postService.getPost(params.id as string);
-        const postData = response.data as PostWithRelations;
+        const postData = response.data;
 
         const ownerId = getOwnerId(postData);
-        if (user && ownerId !== null && Number(ownerId) !== Number(user.id)) {
+        if (user && ownerId !== null && ownerId !== user.id) {
           alert('Vous n\'etes pas autorise a modifier ce post');
           router.push('/posts');
           return;

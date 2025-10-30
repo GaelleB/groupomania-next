@@ -8,24 +8,15 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { postService } from '@/lib/api';
 import { resolveImageUrl } from '@/lib/media';
-import { Post } from '@/types';
+import { Post } from '@/lib/types';
 import styles from './post.module.css';
 
-type PostWithRelations = Post & {
-  user?: { prenom: string; nom: string };
-  User?: { prenom: string; nom: string };
-  userId?: number;
-  UserId?: number;
-};
-
-const getOwnerId = (data: PostWithRelations | null) => {
+const getOwnerId = (data: Post | null) => {
   if (!data) return null;
-  if (data.userId !== undefined && data.userId !== null) return Number(data.userId);
-  if (data.UserId !== undefined && data.UserId !== null) return Number(data.UserId);
-  return null;
+  return data.UserId;
 };
 
-const getAuthor = (data: PostWithRelations | null) => {
+const getAuthor = (data: Post | null) => {
   if (!data) return null;
   return data.user ?? data.User ?? null;
 };
@@ -34,7 +25,7 @@ export default function PostDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { user } = useAuth();
-  const [post, setPost] = useState<PostWithRelations | null>(null);
+  const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -47,7 +38,7 @@ export default function PostDetailPage() {
   const loadPost = async () => {
     try {
       const response = await postService.getPost(params.id as string);
-      setPost(response.data as PostWithRelations);
+      setPost(response.data);
     } catch (error) {
       console.error('Erreur lors du chargement du post :', error);
       alert('Post introuvable');
@@ -99,7 +90,7 @@ export default function PostDetailPage() {
                 })}
               </span>
             </div>
-            {user?.id === Number(postOwnerId ?? undefined) && (
+            {user?.id === postOwnerId && (
               <div className={styles.actions}>
                 <button
                   onClick={() => router.push(`/posts/${post.id}/edit`)}
