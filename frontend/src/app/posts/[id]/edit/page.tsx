@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Header from '@/components/Header';
@@ -193,7 +194,14 @@ export default function EditPostPage() {
 
             {existingImageUrl && (
               <div className={styles.currentImageWrapper}>
-                <img src={existingImageUrl} alt="Image actuelle du post" />
+                <Image
+                  src={existingImageUrl}
+                  alt="Image actuelle du post"
+                  width={400}
+                  height={300}
+                  style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+                  priority={false}
+                />
                 <button
                   type="button"
                   className={styles.removeImageBtn}
@@ -206,7 +214,14 @@ export default function EditPostPage() {
 
             {newImagePreview && (
               <div className={styles.previewWrapper}>
-                <img src={newImagePreview} alt="Prévisualisation de la nouvelle image" />
+                <Image
+                  src={newImagePreview}
+                  alt="Prévisualisation de la nouvelle image"
+                  width={400}
+                  height={300}
+                  style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+                  unoptimized
+                />
                 <button
                   type="button"
                   className={styles.removeImageBtn}

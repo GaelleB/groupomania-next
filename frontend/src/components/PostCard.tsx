@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import { useMemo, useState } from 'react';
+import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { postService } from '@/lib/api';
 import { resolveImageUrl } from '@/lib/media';
@@ -173,7 +174,17 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
       <p className={styles.content}>{post.content}</p>
 
       {imageUrl && (
-        <img src={imageUrl ?? ''} alt="Illustration du post" className={styles.image} />
+        <div className={styles.imageWrapper}>
+          <Image
+            src={imageUrl ?? ''}
+            alt={post.title || 'Illustration du post'}
+            width={800}
+            height={600}
+            className={styles.image}
+            style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+            priority={false}
+          />
+        </div>
       )}
 
       <div className={styles.interactions}>

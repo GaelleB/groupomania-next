@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Header from '@/components/Header';
@@ -92,7 +93,14 @@ export default function NewPostPage() {
             <input type="file" id="image" onChange={handleImageChange} accept="image/*" />
             {imagePreview && (
               <div className={styles.imagePreview}>
-                <img src={imagePreview} alt="Pr\u00E9visualisation" />
+                <Image
+                  src={imagePreview}
+                  alt="Prévisualisation de l'image"
+                  width={400}
+                  height={300}
+                  style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+                  unoptimized
+                />
                 <button
                   type="button"
                   onClick={() => {
