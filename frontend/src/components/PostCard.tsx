@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { postService } from '@/lib/api';
 import { resolveImageUrl } from '@/lib/media';
-import { Post, Like, Dislike, Comment } from '@/lib/types';
+import { Post, Comment } from '@/lib/types';
 import styles from './PostCard.module.css';
 
 interface PostCardProps {
@@ -13,54 +13,67 @@ interface PostCardProps {
   onUpdate?: () => void;
 }
 
+const REACTION_EMOJIS = {
+  like: '👍',
+  love: '❤️',
+  wow: '😮',
+  sad: '😢',
+  angry: '😠',
+} as const;
+
 export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
   const { user } = useAuth();
-  const [likes, setLikes] = useState<Like[]>(post.Likes || []);
-  const [dislikes, setDislikes] = useState<Dislike[]>(post.Dislikes || []);
+  const [reactions, setReactions] = useState(post.Reactions || []);
   const [comments, setComments] = useState<Comment[]>(post.Comments || []);
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState('');
   const [addingComment, setAddingComment] = useState(false);
 
-  const isLiked = likes.some((like) => like.UserId === user?.id);
-  const isDisliked = dislikes.some((dislike) => dislike.UserId === user?.id);
   const isOwner = user?.id === post.UserId;
   const commentCount = comments.length;
+
+  // Calculer les compteurs pour chaque type de réaction
+  const reactionCounts = {
+    like: reactions.filter((r) => r.type === 'like').length,
+    love: reactions.filter((r) => r.type === 'love').length,
+    wow: reactions.filter((r) => r.type === 'wow').length,
+    sad: reactions.filter((r) => r.type === 'sad').length,
+    angry: reactions.filter((r) => r.type === 'angry').length,
+  };
+
+  // Trouver la réaction de l'utilisateur courant
+  const userReaction = reactions.find((r) => r.UserId === user?.id)?.type;
 
   const imageUrl = useMemo(() => resolveImageUrl(post.image), [post.image]);
   const author = post.User ?? post.user;
 
-  const handleLike = async () => {
+  const handleReaction = async (type: 'like' | 'love' | 'wow' | 'sad' | 'angry') => {
+    if (!user) return;
+
     try {
-      await postService.likePost(post.id);
+      await postService.reactToPost(post.id, type);
 
-      if (isLiked) {
-        setLikes((prev) => prev.filter((like) => like.UserId !== user?.id));
-      } else {
-        setLikes((prev) => [...prev, { PostId: post.id, UserId: user!.id }]);
-        if (isDisliked) {
-          setDislikes((prev) => prev.filter((dislike) => dislike.UserId !== user?.id));
+      setReactions((prev) => {
+        // Supprimer la réaction existante de l'utilisateur
+        const withoutUserReaction = prev.filter((r) => r.UserId !== user.id);
+
+        // Si c'était la même réaction, on la supprime (toggle)
+        if (userReaction === type) {
+          return withoutUserReaction;
         }
-      }
-    } catch (error) {
-      console.error('Erreur lors du like :', error);
-    }
-  };
 
-  const handleDislike = async () => {
-    try {
-      await postService.dislikePost(post.id);
-
-      if (isDisliked) {
-        setDislikes((prev) => prev.filter((dislike) => dislike.UserId !== user?.id));
-      } else {
-        setDislikes((prev) => [...prev, { PostId: post.id, UserId: user!.id }]);
-        if (isLiked) {
-          setLikes((prev) => prev.filter((like) => like.UserId !== user?.id));
-        }
-      }
+        // Sinon, ajouter la nouvelle réaction
+        return [
+          ...withoutUserReaction,
+          {
+            PostId: post.id,
+            UserId: user.id,
+            type,
+          },
+        ];
+      });
     } catch (error) {
-      console.error('Erreur lors du dislike :', error);
+      console.error('Erreur lors de la réaction :', error);
     }
   };
 
@@ -165,20 +178,22 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
 
       <div className={styles.interactions}>
         <div className={styles.reactions}>
-          <button
-            onClick={handleLike}
-            className={`${styles.likeBtn} ${isLiked ? styles.active : ''}`}
-            aria-pressed={isLiked}
-          >
-            ?? {likes.length}
-          </button>
-          <button
-            onClick={handleDislike}
-            className={`${styles.dislikeBtn} ${isDisliked ? styles.active : ''}`}
-            aria-pressed={isDisliked}
-          >
-            ?? {dislikes.length}
-          </button>
+          {(Object.keys(REACTION_EMOJIS) as Array<keyof typeof REACTION_EMOJIS>).map((type) => {
+            const count = reactionCounts[type];
+            const isActive = userReaction === type;
+
+            return (
+              <button
+                key={type}
+                onClick={() => handleReaction(type)}
+                className={`${styles.reactionBtn} ${isActive ? styles.active : ''}`}
+                aria-pressed={isActive}
+                title={type.charAt(0).toUpperCase() + type.slice(1)}
+              >
+                {REACTION_EMOJIS[type]} {count > 0 && <span>{count}</span>}
+              </button>
+            );
+          })}
         </div>
 
         <button
@@ -186,7 +201,7 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
           className={styles.commentToggle}
           aria-expanded={showComments}
         >
-          ?? {commentCount} commentaire{commentCount > 1 ? 's' : ''}
+          💬 {commentCount} commentaire{commentCount > 1 ? 's' : ''}
         </button>
       </div>
 
